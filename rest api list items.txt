@@ -1,0 +1,35 @@
+<input type="button" id="btnGetEmployees" value="Get Employees" />  
+<ul id="eData"></ul>  
+ <script src="http://spserver/sfo/hr/SiteAssets/jquery.min.js"></script>
+<script type="text/javascript">  
+    $(function()  
+    {  
+        $("#btnGetEmployees").click(function()  
+        {  
+            $.ajax(  
+                {  
+                    url:"http://spserver/sfo/hr/_api/web/lists/getbytitle('E-mail ID Request')/items",  
+                    type: "GET",  
+                    contentType : "application/json",  
+                    headers : {"accept":"application/json;odata=verbose"},  
+                    success: OnSuccess,  
+                    error: OnError  
+                }  
+            );  
+  
+            // On success we are binding the result to UL  
+            function OnSuccess (result){  
+                alert('Success!!!');  
+                r = result.d.results;  
+                for (var i =0; i<r.length; i++){  
+                    $("#eData").append ("<li>" + r[i].Title + "</li>");  
+                }  
+            }  
+  
+            // Alert the error message when error occurs  
+            function OnError (err){  
+                alert ('Failed!!!');  
+            }  
+        });  
+    });  
+</script>  

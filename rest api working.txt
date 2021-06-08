@@ -1,0 +1,65 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(function(){
+$("#btnClick").click(function(){
+
+getuser();
+
+
+function getuser() {
+
+//alert("getuser");
+var requri=_spPageContextInfo.webAbsoluteUrl + "/_api/web/currentuser/?$select=Title";
+$.ajax({
+url: requri,
+type: "GET",
+headers: {
+"accept":"application/json;odata=verbose",
+"content-type": "application/json;odata=verbose",
+"X-RequestDigest":$("#_REQUESTDIGEST").val()
+},
+success: onSuccess1,
+error: onError1
+});
+}
+function onSuccess1(data) {
+var name = data.d.Title;
+//alert(name);
+show(name);
+
+}
+
+function onError1(error) {
+alert(JSON.stringify(error));
+}
+
+function show(name) {
+
+var requestUri = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('Tasks')/items?$select=Title,Status,WorkflowName&$filter=(Status eq 'Completed') and (WorkflowName eq 'Quote Approval Workflow') and (AssignedTo eq '" + name + "')";
+$.ajax({
+url: requestUri,
+type: "GET",
+headers: {
+"accept":"application/json;odata=verbose",
+"content-type": "application/json;odata=verbose",
+"X-RequestDigest":$("#_REQUESTDIGEST").val()
+},
+success: onSuccess,
+error: onError
+});
+}
+
+function onSuccess(data) {
+var itemsCount = data.d.results.length;
+
+alert (itemsCount);
+}
+
+function onError(error) {
+alert(JSON.stringify(error));
+}
+});
+});
+</script>
+
+<input type="button" id="btnClick" value="Count List Items"/>
